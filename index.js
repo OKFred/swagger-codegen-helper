@@ -9,25 +9,22 @@ function main() {
     console.log(args);
     // 发起请求到后端的 swagger-codegen API
     const swaggerCodegenAPI = "http://localhost:8787/generate-code"; // 后端 Swagger Codegen 的 API 地址
-    const params = args.join("&");
-    const fullURL = `${swaggerCodegenAPI}?${params}`;
-    try {
-        const url = new URL(fullURL);
-        const searchParams = url.searchParams;
-        if (searchParams.size === 0) {
-            const configStr = fs.readFileSync("./config.json", "utf-8");
-            const configObj = JSON.parse(configStr);
-            const configKeys = Object.keys(configObj).join(", ");
-            console.error("缺少参数。支持的参数有：");
-            console.error(configKeys);
-            console.error("以【node index.js key1=value1 key2=value2】的形式传入");
-            throw new Error("No parameters provided");
-        }
-    } catch (e) {
-        return;
+    const bodyObj = {};
+    args.forEach((arg) => {
+        const [key, value] = arg.split("=");
+        bodyObj[key] = value;
+    });
+    if (Object.keys(bodyObj).length === 0) {
+        const configStr = fs.readFileSync("./config.json", "utf-8");
+        const configObj = JSON.parse(configStr);
+        const configKeys = Object.keys(configObj).join(", ");
+        console.error("缺少参数。支持的参数有：");
+        console.error(configKeys);
+        console.error("以【node index.js key1=value1 key2=value2】的形式传入");
+        throw new Error("No parameters provided");
     }
     axios
-        .post(swaggerCodegenAPI, params, {
+        .post(swaggerCodegenAPI, bodyObj, {
             "content-type": "application/json",
             responseType: "arraybuffer", // 设置为下载文件（arraybuffer）响应类型
         })
