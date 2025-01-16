@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "bin": "swagger-codegen-helper",
-        "test": "node index.js language=typescript-fetch verbose=true"
+        "test": "node index.js language=typescript-fetch verbose=true swaggerUrl=https://petstore.swagger.io/v2/swagger.json"
     },
     "keywords": [
         "code",
