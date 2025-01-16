@@ -27,7 +27,7 @@ function main() {
         return;
     }
     axios
-        .post(fullURL, params, {
+        .post(swaggerCodegenAPI, params, {
             "content-type": "application/json",
             responseType: "arraybuffer", // 设置为下载文件（arraybuffer）响应类型
         })
