@@ -1,0 +1,24 @@
+{
+    "name": "swagger-codegen-helper",
+    "version": "1.0.0",
+    "description": "help generate code from swagger(openapi) docs",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "bin": "swagger-codegen-helper",
+        "test": "node index.js language=typescript-fetch verbose=true"
+    },
+    "keywords": [
+        "code",
+        "openapi"
+    ],
+    "author": "fredzh",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.7.9",
+        "commander": "^13.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.6"
+    }
+}

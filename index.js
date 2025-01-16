@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+import process from "process";
+import axios from "axios";
+import path from "path";
+import fs from "fs";
+
+function main() {
+    const args = process.argv.slice(2);
+    console.log(args);
+    // 发起请求到后端的 swagger-codegen API
+    const swaggerCodegenAPI = "http://localhost:8787/generate-code"; // 后端 Swagger Codegen 的 API 地址
+    const params = args.join("&");
+    const fullURL = `${swaggerCodegenAPI}?${params}`;
+    try {
+        const url = new URL(fullURL);
+        const searchParams = url.searchParams;
+        if (searchParams.size === 0) {
+            const configStr = fs.readFileSync("./config.json", "utf-8");
+            const configObj = JSON.parse(configStr);
+            const configKeys = Object.keys(configObj).join(", ");
+            console.error("缺少参数。支持的参数有：");
+            console.error(configKeys);
+            console.error("以【node index.js key1=value1 key2=value2】的形式传入");
+            throw new Error("No parameters provided");
+        }
+    } catch (e) {
+        return;
+    }
+    axios
+        .post(fullURL, params, {
+            "content-type": "application/json",
+            responseType: "arraybuffer", // 设置为下载文件（arraybuffer）响应类型
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                // 如果返回的是 ZIP 文件（成功），保存文件
+                const zipFileName = path.join(options.output || "./", "swagger-codegen.zip");
+                fs.writeFileSync(zipFileName, response.data);
+                console.log(`Generated code saved to ${zipFileName}`);
+            } else {
+                console.error("Unexpected response status:", response.status);
+            }
+        })
+        .catch((error) => {
+            if (error.response) {
+                // 如果响应中包含错误码（> 399），处理失败
+                if (error.response.status > 399) {
+                    console.error(`Error: ${error.response.status} - ${error.response.data}`);
+                }
+            } else {
+                // 如果请求本身失败（例如网络问题），处理网络错误
+                console.error("Request failed:", error.message);
+            }
+        });
+}
+
+process.on("uncaughtException", (err) => {
+    console.error(err);
+});
+
+main();
