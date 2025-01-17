@@ -8,7 +8,7 @@
         "build": "tsc",
         "dev": "node dist/index.js",
         "bin": "swagger-codegen-helper",
-        "test": "node dist/index.js lang=typescript-fetch verbose=true swaggerUrl=https://petstore.swagger.io/v2/swagger.json"
+        "test": "node dist/index.js lang=typescript-fetch swaggerUrl=https://petstore.swagger.io/v2/swagger.json"
     },
     "keywords": [
         "code",
