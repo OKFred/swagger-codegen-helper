@@ -8,7 +8,7 @@ Requires the `swagger-code-server` to be running.
 
 ## Run
 1. Run `npm install`
-2. Run `npm start`
+2. Run `npm run start`
 
 ## License
 MIT
