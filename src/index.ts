@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import process from "process";
 import axios from "axios";
-import path from "path";
 import fs from "fs";
 
 function main() {
@@ -9,7 +8,7 @@ function main() {
     console.log(args);
     // 发起请求到后端的 swagger-codegen API
     const swaggerCodegenAPI = "http://localhost:8787/generate-code"; // 后端 Swagger Codegen 的 API 地址
-    const bodyObj = {};
+    const bodyObj: Record<string, unknown> = {};
     args.forEach((arg) => {
         const [key, value] = arg.split("=");
         bodyObj[key] = value;
