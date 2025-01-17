@@ -8,7 +8,7 @@ function main() {
     const args = process.argv.slice(2);
     console.log(args);
     // 发起请求到后端的 swagger-codegen API
-    const bodyObj: Record<string, unknown> = {};
+    const bodyObj: { [key: string]: unknown; swaggerJson?: string } = { swaggerJson: "" };
     args.forEach((arg) => {
         const [key, value] = arg.split("=");
         bodyObj[key] = value;
@@ -24,6 +24,12 @@ function main() {
             "参考链接：https://github.com/swagger-api/swagger-codegen?tab=readme-ov-file#to-generate-a-sample-client-library",
         );
         throw new Error("No parameters provided");
+    }
+    if (bodyObj.swaggerJson) {
+        if (fs.existsSync(bodyObj.swaggerJson)) {
+            bodyObj.swaggerJson = fs.readFileSync(bodyObj.swaggerJson, "utf-8");
+            console.log("Swagger JSON file loaded");
+        }
     }
     axios
         .post(swaggerCodegenAPI, bodyObj, {

@@ -1,6 +1,6 @@
 {
     "name": "swagger-codegen-helper",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "help generate code from swagger(openapi) docs",
     "main": "dist/index.js",
     "type": "module",
