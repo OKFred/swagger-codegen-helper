@@ -1,13 +1,15 @@
 {
     "name": "swagger-codegen-helper",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "help generate code from swagger(openapi) docs",
     "main": "dist/index.js",
     "type": "module",
+    "bin": {
+        "swagger-codegen-helper": "dist/index.js"
+    },
     "scripts": {
         "build": "tsc",
         "dev": "node dist/index.js",
-        "bin": "swagger-codegen-helper",
         "test": "node dist/index.js lang=typescript-fetch swaggerUrl=https://petstore.swagger.io/v2/swagger.json"
     },
     "keywords": [
