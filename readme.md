@@ -16,7 +16,7 @@ Requires the `swagger-code-server` to be running.
 ### Run with npx
 
 ```bash
-npx swagger-code-helper lang=typescript-fetch swaggerJson=./swaggerApi.json server=http://localhost:8787/generate-code
+npx swagger-codegen-helper lang=typescript-fetch swaggerJson=./swaggerApi.json server=http://localhost:8787/generate-code
 ```
 
 Specify the language, swaggerJson file, and the server URL(optional).
