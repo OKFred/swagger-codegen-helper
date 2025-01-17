@@ -25,13 +25,13 @@ function main() {
     }
     axios
         .post(swaggerCodegenAPI, bodyObj, {
-            "content-type": "application/json",
+            headers: { "Content-Type": "application/json" },
             responseType: "arraybuffer", // 设置为下载文件（arraybuffer）响应类型
         })
         .then((response) => {
             if (response.status === 200) {
                 // 如果返回的是 ZIP 文件（成功），保存文件
-                const zipFileName = path.join(options.output || "./", "swagger-codegen.zip");
+                const zipFileName = "swagger-codegen.zip";
                 fs.writeFileSync(zipFileName, response.data);
                 console.log(`Generated code saved to ${zipFileName}`);
             } else {
