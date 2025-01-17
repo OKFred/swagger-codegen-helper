@@ -2,6 +2,7 @@
 import process from "process";
 import axios from "axios";
 import fs from "fs";
+import { commandMapping } from "./commandMapping.js";
 function main() {
     const args = process.argv.slice(2);
     console.log(args);
@@ -13,12 +14,10 @@ function main() {
         bodyObj[key] = value;
     });
     if (Object.keys(bodyObj).length === 0) {
-        const configStr = fs.readFileSync("@/config.json", "utf-8");
-        const configObj = JSON.parse(configStr);
-        const configKeys = Object.keys(configObj).join(", ");
         console.error("缺少参数。支持的参数有：");
-        console.error(configKeys);
+        console.table(commandMapping);
         console.error("以【node index.js key1=value1 key2=value2】的形式传入");
+        console.log("参考链接：https://github.com/swagger-api/swagger-codegen?tab=readme-ov-file#to-generate-a-sample-client-library");
         throw new Error("No parameters provided");
     }
     axios
