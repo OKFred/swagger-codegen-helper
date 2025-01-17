@@ -13,7 +13,7 @@ function main() {
         bodyObj[key] = value;
     });
     if (Object.keys(bodyObj).length === 0) {
-        const configStr = fs.readFileSync("./config.json", "utf-8");
+        const configStr = fs.readFileSync("@/config.json", "utf-8");
         const configObj = JSON.parse(configStr);
         const configKeys = Object.keys(configObj).join(", ");
         console.error("缺少参数。支持的参数有：");
