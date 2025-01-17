@@ -12,7 +12,9 @@ function main() {
         const [key, value] = arg.split("=");
         bodyObj[key] = value;
     });
-    const swaggerCodegenAPI = String(bodyObj["server"]) || "http://localhost:8787/generate-code"; // 后端 Swagger Codegen 的 API 地址
+    const swaggerCodegenAPI = bodyObj["server"]
+        ? String(bodyObj["server"])
+        : "http://localhost:8787/generate-code"; // 后端 Swagger Codegen 的 API 地址
     if (Object.keys(bodyObj).length === 0) {
         console.error("缺少参数。支持的参数有：");
         console.table(commandMapping);
