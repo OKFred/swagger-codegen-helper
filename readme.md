@@ -20,6 +20,13 @@ npx swagger-codegen-helper lang=typescript-fetch swaggerJson=./swaggerApi.json s
 ```
 
 Specify the language, swaggerJson file, and the server URL(optional).
+[Supported parameters](/src/commandMapping.ts)
+
+Extra Parameters: 
+swaggerUrl: URL to the swagger file
+swaggerJson: Path to the swagger file
+swaggerVersion: Version of the swagger file
+server: URL to the swagger codegen server
 
 ## License
 

@@ -19,7 +19,7 @@ function main() {
         console.error("缺少参数。支持的参数有：");
         console.table(commandMapping);
         console.error("以【node index.js key1=value1 key2=value2】的形式传入");
-        console.log("参考链接：https://github.com/swagger-api/swagger-codegen?tab=readme-ov-file#to-generate-a-sample-client-library");
+        console.log("参考Readme 和这个链接：https://github.com/swagger-api/swagger-codegen?tab=readme-ov-file#to-generate-a-sample-client-library");
         throw new Error("No parameters provided");
     }
     if (bodyObj.swaggerJson) {
