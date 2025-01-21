@@ -76,8 +76,38 @@ function useRemote(bodyObj: bodyObjLike) {
         });
 }
 
-function useLocal(bodyObj: bodyObjLike) {
+async function useLocal(bodyObj: bodyObjLike) {
     const { swaggerVersion, swaggerJson, swaggerUrl, ...args } = bodyObj;
+    const fileArr = [
+        {
+            version: "2",
+            file: "swagger-codegen-cli-v2.jar",
+            url: "https://assets.chintanneng.com/public-assets/swagger-codegen-cli-v2.jar",
+        },
+        {
+            version: "3",
+            file: "swagger-codegen-cli-v3.jar",
+            url: "https://assets.chintanneng.com/public-assets/swagger-codegen-cli-v3.jar",
+        },
+    ];
+    // 检查 jar 文件是否存在
+    for (const item of fileArr) {
+        if (!fs.existsSync(`./jar/${item.file}`)) {
+            console.log("initializing...首次运行需要初始化，请耐心等待...");
+            console.log(`Downloading ${item.file}...`);
+            const writer = fs.createWriteStream(`./jar/${item.file}`);
+            const response = await axios({
+                url: item.url,
+                method: "GET",
+                responseType: "stream",
+            });
+            response.data.pipe(writer);
+            await new Promise((resolve, reject) => {
+                writer.on("finish", resolve);
+                writer.on("error", reject);
+            });
+        }
+    }
     const javaCommand = /3/.test(String(swaggerVersion))
         ? "java -jar ./jar/swagger-codegen-cli-v3.jar"
         : "java -jar ./jar/swagger-codegen-cli-v2.jar";

@@ -21,8 +21,10 @@ Local Mode:
 
 ```bash
 npx swagger-codegen-helper lang=typescript-fetch swaggerUrl=https://petstore3.swagger.io/api/v3/openapi.json swaggerVersion=3
-
 npx swagger-codegen-helper lang=typescript-fetch swaggerJson=v2.json swaggerVersion=2 server=http://localhost:8787/generate-code
+
+npm run test:v2
+npm run test:v3
 ```
 
 Specify the language, swaggerJson file, and the server URL(optional).
