@@ -2,27 +2,31 @@
 import process from "process";
 import axios from "axios";
 import fs from "fs";
+import child_process from "child_process";
 import { commandMapping } from "./commandMapping.js";
+
+type bodyObjLike = {
+    [key: string]: unknown;
+    swaggerJson?: string;
+    swaggerUrl?: string;
+    swaggerVersion?: string;
+    server?: string;
+};
 
 function main() {
     const args = process.argv.slice(2);
     console.log(args);
     // 发起请求到后端的 swagger-codegen API
-    const bodyObj: { [key: string]: unknown; swaggerJson?: string } = { swaggerJson: "" };
+    const bodyObj: bodyObjLike = { swaggerJson: "" };
     args.forEach((arg) => {
         const [key, value] = arg.split("=");
         bodyObj[key] = value;
     });
-    const swaggerCodegenAPI = bodyObj["server"]
-        ? String(bodyObj["server"])
-        : "http://localhost:8787/generate-code"; // 后端 Swagger Codegen 的 API 地址
     if (Object.keys(bodyObj).length === 0) {
         console.error("缺少参数。支持的参数有：");
         console.table(commandMapping);
         console.error("以【node index.js key1=value1 key2=value2】的形式传入");
-        console.log(
-            "参考Readme 和这个链接：https://github.com/swagger-api/swagger-codegen?tab=readme-ov-file#to-generate-a-sample-client-library",
-        );
+        console.log("参考Readme.md");
         throw new Error("No parameters provided");
     }
     if (bodyObj.swaggerJson) {
@@ -31,6 +35,19 @@ function main() {
             console.log("Swagger JSON file loaded");
         }
     }
+    if (!bodyObj["output"]) {
+        bodyObj["output"] = bodyObj["lang"] || "output";
+    }
+    if (bodyObj["server"]) {
+        return useRemote(bodyObj);
+    } else {
+        return useLocal(bodyObj);
+    }
+}
+
+function useRemote(bodyObj: bodyObjLike) {
+    const swaggerCodegenAPI = bodyObj["server"];
+    if (!swaggerCodegenAPI) return console.error("缺少 server 参数");
     axios
         .post(swaggerCodegenAPI, bodyObj, {
             headers: { "Content-Type": "application/json" },
@@ -57,6 +74,32 @@ function main() {
                 console.error("Request failed:", error.message);
             }
         });
+}
+
+function useLocal(bodyObj: bodyObjLike) {
+    const { swaggerVersion, swaggerJson, swaggerUrl, ...args } = bodyObj;
+    const javaCommand = /3/.test(String(swaggerVersion))
+        ? "java -jar ./jar/swagger-codegen-cli-v3.jar"
+        : "java -jar ./jar/swagger-codegen-cli-v2.jar";
+    // 生成命令
+    const paramArr: string[] = [];
+    commandMapping.forEach((item) => {
+        const value = bodyObj[item.key];
+        if (value) {
+            paramArr.push(`${item.args} ${value}`);
+        }
+    });
+
+    let command = `${javaCommand} generate`;
+    if (swaggerJson) {
+        command += ` -i ${swaggerJson}`;
+    } else if (swaggerUrl) {
+        command += ` -i ${swaggerUrl}`;
+    }
+    command += " " + paramArr.join(" ");
+    console.log(command);
+    //执行命令，inherit
+    child_process.spawnSync(command, { stdio: "inherit", shell: true });
 }
 
 process.on("uncaughtException", (err) => {
