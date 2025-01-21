@@ -9,8 +9,8 @@ This is a helper for initializing a request to the Swagger Codegen Server.
 Remote Mode: Requires the `swagger-code-server` to be running.
 Local Mode:
 
--   Node.js
--   JDK 17
+- [Node.js latest](https://nodejs.org/download/release/latest/)
+- [OpenJDK 17](https://openjdk.org/projects/jdk/17/)
 
 ## Run
 

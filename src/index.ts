@@ -128,6 +128,13 @@ async function useLocal(bodyObj: bodyObjLike) {
     }
     command += " " + paramArr.join(" ");
     console.log(command);
+    //执行前检查是否有java运行环境
+    try {
+        child_process.execSync("java -version", { stdio: "ignore" });
+    } catch (e) {
+        console.error("未找到java运行环境，请先安装java环境");
+        return;
+    }
     //执行命令，inherit
     child_process.spawnSync(command, { stdio: "inherit", shell: true });
 }
