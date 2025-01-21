@@ -90,6 +90,8 @@ async function useLocal(bodyObj: bodyObjLike) {
             url: "https://assets.chintanneng.com/public-assets/swagger-codegen-cli-v3.jar",
         },
     ];
+    //检查 jar 文件夹是否存在
+    if (!fs.existsSync("./jar")) fs.mkdirSync("./jar");
     // 检查 jar 文件是否存在
     for (const item of fileArr) {
         if (!fs.existsSync(`./jar/${item.file}`)) {
