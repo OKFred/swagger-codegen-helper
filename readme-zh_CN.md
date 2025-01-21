@@ -2,7 +2,7 @@
 
 ## 描述
 
-这是一个用于发送请求到 Swagger Codegen 的脚手架。
+发送请求到 Swagger Codegen，并生成API代码。
 
 ## 先决条件
 
@@ -11,7 +11,9 @@
 -   [Node.js 最新版](https://nodejs.org/download/release/latest/)
 -   [OpenJDK 17](https://openjdk.org/projects/jdk/17/)
 
-远程模式：需要运行 `swagger-code-server`。
+远程模式：
+
+-   swagger-code-server (npm)
 
 ## 运行
 
@@ -22,8 +24,8 @@
 ### 使用 npx 运行
 
 ```bash
-npx swagger-codegen-helper lang=typescript-axios swaggerUrl=https://petstore3.swagger.io/api/v3/openapi.json swaggerVersion=3
-npx swagger-codegen-helper lang=typescript-axios swaggerJson=v2.json swaggerVersion=2 server=http://localhost:8787/generate-code
+npx swagger-codegen-helper lang=typescript-fetch swaggerUrl=https://petstore3.swagger.io/api/v3/openapi.json swaggerVersion=3
+npx swagger-codegen-helper lang=typescript-fetch swaggerJson=v2.json swaggerVersion=2 server=http://localhost:8787/generate-code
 ```
 
 #### 说明
@@ -35,7 +37,7 @@ npx swagger-codegen-helper lang=typescript-axios swaggerJson=v2.json swaggerVers
 -   swaggerUrl: swagger 文件的 URL，比如 https://petstore3.swagger.io/api/v3/openapi.json
 -   swaggerJson: swagger 文件的路径，比如 ./v2.json
 -   swaggerVersion: swagger 文件的版本，2 或 3
--   lang: 生成的代码的语言，比如 typescript-axios、python、java 等等
+-   lang: 生成的代码的语言，比如 typescript-fetch、javascript、python、java 等等
 -   server（远程模式）（可选）：swagger codegen 服务器的 URL
 
 ## 参考
