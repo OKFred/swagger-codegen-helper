@@ -20,12 +20,6 @@ function main() {
         console.log("参考Readme.md");
         throw new Error("No parameters provided");
     }
-    if (bodyObj.swaggerJson) {
-        if (fs.existsSync(bodyObj.swaggerJson)) {
-            bodyObj.swaggerJson = fs.readFileSync(bodyObj.swaggerJson, "utf-8");
-            console.log("Swagger JSON file loaded");
-        }
-    }
     if (!bodyObj["output"]) {
         bodyObj["output"] = bodyObj["lang"] || "output";
     }
@@ -38,6 +32,12 @@ function main() {
 }
 function useRemote(bodyObj) {
     const swaggerCodegenAPI = bodyObj["server"];
+    if (bodyObj.swaggerJson) {
+        if (fs.existsSync(bodyObj.swaggerJson)) {
+            bodyObj.swaggerJson = fs.readFileSync(bodyObj.swaggerJson, "utf-8");
+            console.log("Swagger JSON file loaded");
+        }
+    }
     if (!swaggerCodegenAPI)
         return console.error("缺少 server 参数");
     axios
