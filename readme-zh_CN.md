@@ -21,7 +21,7 @@
 2. 运行 `npm run start`
 3. 运行 `npm run test:v2` 或 `npm run test:v3`
 
-### 使用 npx 运行
+### 使用 npx 运行（推荐）
 
 ```bash
 npx swagger-codegen-helper lang=typescript-fetch swaggerUrl=https://petstore3.swagger.io/api/v3/openapi.json swaggerVersion=3

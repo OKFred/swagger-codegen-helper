@@ -23,7 +23,7 @@ Remote Mode:
 2. Run `npm run start`
 3. Run `npm run test:v2` or `npm run test:v3`
 
-### Run with npx
+### Run with npx (Recommended)
 
 ```bash
 npx swagger-codegen-helper lang=typescript-fetch swaggerUrl=https://petstore3.swagger.io/api/v3/openapi.json swaggerVersion=3
