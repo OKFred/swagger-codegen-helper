@@ -75,12 +75,12 @@ async function useLocal(bodyObj) {
         {
             version: "2",
             file: "swagger-codegen-cli-v2.jar",
-            url: "https://assets.chintanneng.com/public-assets/swagger-codegen-cli-v2.jar",
+            url: "https://maven.aliyun.com/repository/public/io/swagger/swagger-codegen-cli/2.4.44/swagger-codegen-cli-2.4.44.jar",
         },
         {
             version: "3",
             file: "swagger-codegen-cli-v3.jar",
-            url: "https://assets.chintanneng.com/public-assets/swagger-codegen-cli-v3.jar",
+            url: "https://maven.aliyun.com/repository/public/io/swagger/codegen/v3/swagger-codegen-cli/3.0.66/swagger-codegen-cli-3.0.66.jar",
         },
     ];
     //检查 jar 文件夹是否存在
