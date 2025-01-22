@@ -82,24 +82,34 @@ async function useLocal(bodyObj: bodyObjLike) {
         {
             version: "2",
             file: "swagger-codegen-cli-v2.jar",
-            url: "https://maven.aliyun.com/repository/public/io/swagger/swagger-codegen-cli/2.4.44/swagger-codegen-cli-2.4.44.jar",
+            urlCN: "https://maven.aliyun.com/repository/public/io/swagger/swagger-codegen-cli/2.4.44/swagger-codegen-cli-2.4.44.jar",
+            urlEN: "https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.44/swagger-codegen-cli-2.4.44.jar",
         },
         {
             version: "3",
             file: "swagger-codegen-cli-v3.jar",
-            url: "https://maven.aliyun.com/repository/public/io/swagger/codegen/v3/swagger-codegen-cli/3.0.66/swagger-codegen-cli-3.0.66.jar",
+            urlCN: "https://maven.aliyun.com/repository/public/io/swagger/codegen/v3/swagger-codegen-cli/3.0.66/swagger-codegen-cli-3.0.66.jar",
+            urlEN: "https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.66/swagger-codegen-cli-3.0.66.jar",
         },
     ];
     //检查 jar 文件夹是否存在
     if (!fs.existsSync("./jar")) fs.mkdirSync("./jar");
     // 检查 jar 文件是否存在
+    const locale = (
+        process.env.LANG ||
+        process.env.LANGUAGE ||
+        process.env.LC_ALL ||
+        process.env.LC_MESSAGES
+    )?.split(".")[0];
+    console.log("locale", locale);
     for (const item of fileArr) {
         if (!fs.existsSync(`./jar/${item.file}`)) {
             console.log("initializing...首次运行需要初始化，请耐心等待...");
             console.log(`Downloading ${item.file}...`);
             const writer = fs.createWriteStream(`./jar/${item.file}`);
+            const url = /en/i.test(String(locale)) ? item.urlEN : item.urlCN;
             const response = await axios({
-                url: item.url,
+                url,
                 method: "GET",
                 responseType: "stream",
             });
