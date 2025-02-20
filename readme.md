@@ -42,6 +42,10 @@ Important Parameters:
 -   lang: Language of the generated code, e.g. typescript-fetch, javascript, python, java, etc.
 -   server (Remote Mode) (optional): URL to the swagger codegen server, e.g. http://localhost:8787/generate-code
 
+## Advanced
+
+[Advanced Generator Configuration](https://github.com/swagger-api/swagger-codegen/blob/master/docs/generators.md)
+
 ## References
 
 [swagger-codegen](https://github.com/swagger-api/swagger-codegen)

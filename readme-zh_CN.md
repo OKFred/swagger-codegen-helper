@@ -40,6 +40,11 @@ npx swagger-codegen-helper lang=typescript-fetch swaggerJson=v2.json swaggerVers
 -   lang: 生成的代码的语言，比如 typescript-fetch、javascript、python、java 等等
 -   server（远程模式）（可选）：swagger codegen 服务器的 URL
 
+## 高级
+
+[高级生成器配置](https://github.com/swagger-api/swagger-codegen/blob/master/docs/generators.md)
+
+
 ## 参考
 
 [swagger-codegen](https://github.com/swagger-api/swagger-codegen)
