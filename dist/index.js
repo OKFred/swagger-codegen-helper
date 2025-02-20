@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import os from "os";
 import process from "process";
 import axios from "axios";
 import fs from "fs";
@@ -85,20 +86,29 @@ async function useLocal(bodyObj) {
             urlEN: "https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.66/swagger-codegen-cli-3.0.66.jar",
         },
     ];
-    //检查 jar 文件夹是否存在
-    if (!fs.existsSync("./jar"))
-        fs.mkdirSync("./jar");
-    // 检查 jar 文件是否存在
+    //使用系统临时文件夹，并检查权限。如果不行，就放在当前目录的jar文件夹下
+    const tempDir = os.tmpdir();
+    let finalJarDir;
+    try {
+        fs.accessSync(tempDir, fs.constants.W_OK);
+        finalJarDir = tempDir + "/swagger-codegen-helper/jar";
+    }
+    catch (e) {
+        console.error("无法在系统临时文件夹创建文件，请检查权限");
+        finalJarDir = "./jar";
+    }
+    if (!fs.existsSync(finalJarDir))
+        fs.mkdirSync(finalJarDir, { recursive: true });
     const locale = (process.env.LANG ||
         process.env.LANGUAGE ||
         process.env.LC_ALL ||
         process.env.LC_MESSAGES)?.split(".")[0];
-    console.log("locale", locale);
+    console.log("Current locale", locale);
     for (const item of fileArr) {
-        if (!fs.existsSync(`./jar/${item.file}`)) {
-            console.log("initializing...首次运行需要初始化，请耐心等待...");
+        if (!fs.existsSync(finalJarDir + `/${item.file}`)) {
+            console.log("Initializing...please wait...");
             console.log(`Downloading ${item.file}...`);
-            const writer = fs.createWriteStream(`./jar/${item.file}`);
+            const writer = fs.createWriteStream(finalJarDir + `/${item.file}`);
             const url = /en/i.test(String(locale)) ? item.urlEN : item.urlCN;
             const response = await axios({
                 url,
