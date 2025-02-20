@@ -5,14 +5,9 @@ import axios from "axios";
 import fs from "fs";
 import child_process from "child_process";
 import { commandMapping } from "./commandMapping.js";
+import { t, locale } from "./locales/index.js";
 
-type bodyObjLike = {
-    [key: string]: unknown;
-    swaggerJson?: string;
-    swaggerUrl?: string;
-    swaggerVersion?: string;
-    server?: string;
-};
+import type { bodyObjLike } from "./type.js";
 
 function main() {
     const args = process.argv.slice(2);
@@ -24,10 +19,10 @@ function main() {
         bodyObj[key] = value;
     });
     if (Object.keys(bodyObj).length === 0) {
-        console.error("缺少参数。支持的参数有：");
+        console.error(t("missingParams"));
         console.table(commandMapping);
-        console.error("以【node index.js key1=value1 key2=value2】的形式传入");
-        console.log("参考Readme.md");
+        console.error(t("provideParams"));
+        console.log(t("referReadme"));
         throw new Error("No parameters provided");
     }
     if (!bodyObj["output"]) {
@@ -45,10 +40,10 @@ function useRemote(bodyObj: bodyObjLike) {
     if (bodyObj.swaggerJson) {
         if (fs.existsSync(bodyObj.swaggerJson)) {
             bodyObj.swaggerJson = fs.readFileSync(bodyObj.swaggerJson, "utf-8");
-            console.log("Swagger JSON file loaded");
+            console.log(t("jsonFileLoaded"));
         }
     }
-    if (!swaggerCodegenAPI) return console.error("缺少 server 参数");
+    if (!swaggerCodegenAPI) return console.error(t("noServerParam"));
     axios
         .post(swaggerCodegenAPI, bodyObj, {
             headers: { "Content-Type": "application/json" },
@@ -59,9 +54,9 @@ function useRemote(bodyObj: bodyObjLike) {
                 // 如果返回的是 ZIP 文件（成功），保存文件
                 const zipFileName = "swagger-codegen.zip";
                 fs.writeFileSync(zipFileName, response.data);
-                console.log(`Generated code saved to ${zipFileName}`);
+                console.log(`${t("generatedCodeSaved")} ${zipFileName}`);
             } else {
-                console.error("Unexpected response status:", response.status);
+                console.error(t("unexpectedResponse"), response.status);
             }
         })
         .catch((error) => {
@@ -72,7 +67,7 @@ function useRemote(bodyObj: bodyObjLike) {
                 }
             } else {
                 // 如果请求本身失败（例如网络问题），处理网络错误
-                console.error("Request failed:", error.message);
+                console.error(t("requestFailed"), error.message);
             }
         });
 }
@@ -100,21 +95,14 @@ async function useLocal(bodyObj: bodyObjLike) {
         fs.accessSync(tempDir, fs.constants.W_OK);
         finalJarDir = tempDir + "/swagger-codegen-helper/jar";
     } catch (e) {
-        console.error("无法在系统临时文件夹创建文件，请检查权限");
+        console.error(t("cannotCreateFile"));
         finalJarDir = "./jar";
     }
     if (!fs.existsSync(finalJarDir)) fs.mkdirSync(finalJarDir, { recursive: true });
-    const locale = (
-        process.env.LANG ||
-        process.env.LANGUAGE ||
-        process.env.LC_ALL ||
-        process.env.LC_MESSAGES
-    )?.split(".")[0];
-    console.log("Current locale", locale);
     for (const item of fileArr) {
         if (!fs.existsSync(finalJarDir + `/${item.file}`)) {
-            console.log("Initializing...please wait...");
-            console.log(`Downloading ${item.file}...`);
+            console.log(t("initializing"));
+            console.log(`${t("downloading")} ${item.file}...`);
             const writer = fs.createWriteStream(finalJarDir + `/${item.file}`);
             const url = /en/i.test(String(locale)) ? item.urlEN : item.urlCN;
             const response = await axios({
@@ -153,7 +141,7 @@ async function useLocal(bodyObj: bodyObjLike) {
     try {
         child_process.execSync("java -version", { stdio: "ignore" });
     } catch (e) {
-        console.error("未找到java运行环境，请先安装java环境");
+        console.error(t("noJavaEnv"));
         return;
     }
     //执行命令，inherit
@@ -161,7 +149,7 @@ async function useLocal(bodyObj: bodyObjLike) {
 }
 
 process.on("uncaughtException", (err) => {
-    console.error(err);
+    console.error(t("uncaughtException"), err);
 });
 
 main();
