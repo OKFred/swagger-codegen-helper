@@ -8,6 +8,7 @@ import { commandMapping } from "./commandMapping.js";
 import { t, locale } from "./locales/index.js";
 
 import type { bodyObjLike } from "./type.js";
+import path from "path";
 
 function main() {
     const args = process.argv.slice(2);
@@ -118,8 +119,8 @@ async function useLocal(bodyObj: bodyObjLike) {
         }
     }
     const javaCommand = /3/.test(String(swaggerVersion))
-        ? "java -jar ./jar/swagger-codegen-cli-v3.jar"
-        : "java -jar ./jar/swagger-codegen-cli-v2.jar";
+        ? "java -jar " + path.join(finalJarDir, "swagger-codegen-cli-v3.jar")
+        : "java -jar " + path.join(finalJarDir, "swagger-codegen-cli-v2.jar");
     // 生成命令
     const paramArr: string[] = [];
     commandMapping.forEach((item) => {

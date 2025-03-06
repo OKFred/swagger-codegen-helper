@@ -6,6 +6,7 @@ import fs from "fs";
 import child_process from "child_process";
 import { commandMapping } from "./commandMapping.js";
 import { t, locale } from "./locales/index.js";
+import path from "path";
 function main() {
     const args = process.argv.slice(2);
     console.log(args);
@@ -119,8 +120,8 @@ async function useLocal(bodyObj) {
         }
     }
     const javaCommand = /3/.test(String(swaggerVersion))
-        ? "java -jar ./jar/swagger-codegen-cli-v3.jar"
-        : "java -jar ./jar/swagger-codegen-cli-v2.jar";
+        ? "java -jar " + path.join(finalJarDir, "swagger-codegen-cli-v3.jar")
+        : "java -jar " + path.join(finalJarDir, "swagger-codegen-cli-v2.jar");
     // 生成命令
     const paramArr = [];
     commandMapping.forEach((item) => {
