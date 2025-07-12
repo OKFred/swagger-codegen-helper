@@ -1,6 +1,6 @@
 # Swagger Codegen Helper
 
-# [中文文档](./readme-zh_CN.md)
+# [中文文档](https://github.com/OKFred/swagger-codegen-helper/blob/main/readme-zh_CN.md)
 
 ## Description
 
